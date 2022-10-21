@@ -20,15 +20,17 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     private val gson: Gson = Gson()
 
-    private val appDataMutableStateFlow = MutableStateFlow<LCE>(LCE.Loading)
+    private val appDataMutableStateFlow = MutableStateFlow<LCE>(LCE.YetToFetch)
 
     val appDataStateFlow: StateFlow<LCE> = appDataMutableStateFlow
 
     fun loadAppData() {
         viewModelScope.launch {
-            try {
-                val appData = readDataFromRawFolder()
-                appDataMutableStateFlow.emit(LCE.Content(appData))
+            if (appDataStateFlow.value == LCE.YetToFetch || appDataStateFlow.value is LCE.Error) {
+                appDataMutableStateFlow.emit(LCE.Loading)
+                try {
+                    val appData = readDataFromRawFolder()
+                    appDataMutableStateFlow.emit(LCE.Content(appData))
 //                while(true){
 //                    delay(2000)
 //                    val newAppData = (appDataMutableStateFlow.value as LCE.Content).appDataList.toMutableList()
@@ -36,9 +38,10 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 //                    newAppData.removeAt(0)
 //                    appDataMutableStateFlow.emit(LCE.Content(newAppData))
 //                }
-            } catch (exception: Exception) {
-                appDataMutableStateFlow.emit(LCE.Error(exception.toString()))
-            }
+                } catch (exception: Exception) {
+                    appDataMutableStateFlow.emit(LCE.Error(exception.toString()))
+                }
+            } else return@launch
         }
     }
 
