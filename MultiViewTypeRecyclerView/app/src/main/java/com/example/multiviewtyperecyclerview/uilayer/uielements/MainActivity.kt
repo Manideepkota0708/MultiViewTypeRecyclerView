@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
                 mainActivityViewModel.appDataStateFlow
                     .filterIsInstance<LCE.Content>()
                     .collect {
-                    Log.d(TAG, it.appData.toString())
+                    Log.d(TAG, it.appDataList.toString())
                 }
             }
         }

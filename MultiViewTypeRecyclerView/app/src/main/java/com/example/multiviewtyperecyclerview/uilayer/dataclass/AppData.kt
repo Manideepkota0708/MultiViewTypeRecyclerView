@@ -7,7 +7,7 @@ data class AppData(
     val dataMap: DataMap
 )
 
-class DataMap(
+data class DataMap(
     val options: List<String>
 )
 
