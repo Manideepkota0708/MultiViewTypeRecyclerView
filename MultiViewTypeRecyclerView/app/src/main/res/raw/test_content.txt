@@ -1,0 +1,12 @@
+{
+"type": "SINGLE_CHOICE",
+"id": "choice1",
+"title": "Photo 1 choice",
+"dataMap": {
+"options": [
+"Good",
+"OK",
+"Bad"
+]
+}
+}

@@ -1,6 +1,6 @@
 package com.example.multiviewtyperecyclerview.uilayer.dataclass
 
-class AppData(
+data class AppData(
     val type: ContentType,
     val id: String,
     val title: String,
