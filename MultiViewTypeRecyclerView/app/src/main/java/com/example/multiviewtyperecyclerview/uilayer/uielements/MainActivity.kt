@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.*
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.multiviewtyperecyclerview.R
 import com.example.multiviewtyperecyclerview.uilayer.viewmodel.MainActivityViewModel
@@ -39,8 +40,10 @@ class MainActivity : AppCompatActivity() {
                     .filterIsInstance<LCE.Content>()
                     .collect {
                         Log.d(TAG, it.appDataList.toString())
-                        val multiViewTypeAdapter = MultiViewTypeAdapter(it.appDataList)
-                        findViewById<RecyclerView>(R.id.recyclerView).adapter = multiViewTypeAdapter
+                        findViewById<RecyclerView>(R.id.recyclerView).apply {
+                            layoutManager = LinearLayoutManager(this@MainActivity)
+                            adapter = MultiViewTypeAdapter(it.appDataList)
+                        }
                     }
             }
         }
@@ -54,7 +57,8 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(
                             this@MainActivity,
                             "unable to parse Json Array, please check input",
-                            Toast.LENGTH_LONG ).show()
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
             }
         }
