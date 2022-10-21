@@ -3,6 +3,8 @@ package com.example.multiviewtyperecyclerview.uilayer.uielements
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.multiviewtyperecyclerview.R
@@ -14,21 +16,28 @@ class MultiViewTypeAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
-        return super.getItemViewType(position)
+        return appDataList[position].type.ordinal
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = when (viewType) {
+        when (viewType) {
             0 -> {
-                LayoutInflater.from(parent.context)
+                val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.layout_itemview_photo, parent, false)
+                return PhotoViewHolder(view)
+            }
+            1 -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.layout_itemview_single_choice, parent, false)
+                return SingleChoiceViewHolder(view)
             }
             else -> {
-                LayoutInflater.from(parent.context)
+                val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.layout_itemview_photo, parent, false)
+                return PhotoViewHolder(view)
             }
         }
-        return PhotoViewHolder(view)
+
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -38,13 +47,41 @@ class MultiViewTypeAdapter(
                 val photoViewHolder = holder as PhotoViewHolder
                 photoViewHolder.titleView.text = appData.title
             }
+            1 -> {
+                val singleChoiceViewHolder = holder as SingleChoiceViewHolder
+                singleChoiceViewHolder.titleView.text = appData.title
+                appData.dataMap?.options?.let {
+                    singleChoiceViewHolder.addItemsToRadioGroup(it)
+                }
+            }
+            else -> {
+                val photoViewHolder = holder as PhotoViewHolder
+                photoViewHolder.titleView.text = appData.title
+            }
         }
     }
 
     override fun getItemCount() = appDataList.size
 
     inner class PhotoViewHolder(photoView: View) : RecyclerView.ViewHolder(photoView) {
-        val titleView: TextView = photoView.findViewById<TextView>(R.id.title)
+        val titleView: TextView = photoView.findViewById(R.id.title)
+    }
+
+    inner class SingleChoiceViewHolder(singleChoiceView: View) :
+        RecyclerView.ViewHolder(singleChoiceView) {
+        val titleView: TextView = singleChoiceView.findViewById(R.id.title)
+        private val radioGroup: RadioGroup = singleChoiceView.findViewById(R.id.radioGroup)
+
+        fun addItemsToRadioGroup(stringList: List<String>) {
+            radioGroup.apply {
+                removeAllViews()
+                stringList.forEach {
+                    addView(RadioButton(this.context).apply {
+                        text = it
+                    })
+                }
+            }
+        }
     }
 
 }

@@ -4,7 +4,7 @@ data class AppData(
     val type: ContentType,
     val id: String,
     val title: String,
-    val dataMap: DataMap
+    val dataMap: DataMap?
 )
 
 data class DataMap(
