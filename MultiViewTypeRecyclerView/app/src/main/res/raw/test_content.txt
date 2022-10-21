@@ -51,7 +51,7 @@
 {
 "type": "COMMENT",
 "id": "comment3",
-"title": "Photo 3 comments",
+"title": "Photo 3 comments"
 "dataMap": {}
 },
 {

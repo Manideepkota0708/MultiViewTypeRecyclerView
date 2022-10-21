@@ -29,7 +29,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                 val appData = readDataFromRawFolder()
                 appDataMutableStateFlow.emit(LCE.Content(appData))
             } catch (exception: Exception) {
-                appDataMutableStateFlow.emit(LCE.Error)
+                appDataMutableStateFlow.emit(LCE.Error(exception.toString()))
             }
         }
     }

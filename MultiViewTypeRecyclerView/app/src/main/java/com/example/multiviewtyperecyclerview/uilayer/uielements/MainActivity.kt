@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                         Log.d(TAG, it.toString())
                         Toast.makeText(
                             this@MainActivity,
-                            "unable to parse Json Array, please check input",
+                            "please check input, unable to parse Json Array \n reason: ${it.errorMessage}",
                             Toast.LENGTH_LONG
                         ).show()
                     }
