@@ -33,8 +33,8 @@ class MultiViewTypeAdapter(
             }
             else -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.layout_itemview_photo, parent, false)
-                return PhotoViewHolder(view)
+                    .inflate(R.layout.layout_itemview_comment, parent, false)
+                return CommentViewHolder(view)
             }
         }
 
@@ -55,8 +55,8 @@ class MultiViewTypeAdapter(
                 }
             }
             else -> {
-                val photoViewHolder = holder as PhotoViewHolder
-                photoViewHolder.titleView.text = appData.title
+                val commentView = holder as CommentViewHolder
+
             }
         }
     }
@@ -82,6 +82,10 @@ class MultiViewTypeAdapter(
                 }
             }
         }
+    }
+
+    inner class CommentViewHolder(commentView: View) : RecyclerView.ViewHolder(commentView) {
+
     }
 
 }

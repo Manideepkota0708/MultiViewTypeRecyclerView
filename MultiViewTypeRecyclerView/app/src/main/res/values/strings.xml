@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MultiViewTypeRecyclerView</string>
+    <string name="provide_comment">Provide Comment?</string>
 </resources>
