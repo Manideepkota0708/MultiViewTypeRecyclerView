@@ -1,7 +1,6 @@
 package com.example.multiviewtyperecyclerview.uilayer.viewmodel
 
 import android.app.Application
-import android.content.ClipData.Item
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.multiviewtyperecyclerview.R
@@ -26,8 +25,12 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     fun loadAppData() {
         viewModelScope.launch {
-            val appData = readDataFromRawFolder()
-            appDataMutableStateFlow.emit(LCE.Content(appData))
+            try {
+                val appData = readDataFromRawFolder()
+                appDataMutableStateFlow.emit(LCE.Content(appData))
+            } catch (exception: Exception) {
+                appDataMutableStateFlow.emit(LCE.Error)
+            }
         }
     }
 

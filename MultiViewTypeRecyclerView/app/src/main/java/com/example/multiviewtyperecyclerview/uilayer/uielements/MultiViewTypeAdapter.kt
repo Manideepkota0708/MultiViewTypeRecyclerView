@@ -2,9 +2,12 @@ package com.example.multiviewtyperecyclerview.uilayer.uielements
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.multiviewtyperecyclerview.uilayer.dataclass.AppData
 
 
-class MultiViewTypeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MultiViewTypeAdapter(
+    private val appDataList: List<AppData>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return super.getItemViewType(position)
@@ -18,7 +21,5 @@ class MultiViewTypeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         TODO("Not yet implemented")
     }
 
-    override fun getItemCount(): Int {
-        TODO("Not yet implemented")
-    }
+    override fun getItemCount() = appDataList.size
 }
