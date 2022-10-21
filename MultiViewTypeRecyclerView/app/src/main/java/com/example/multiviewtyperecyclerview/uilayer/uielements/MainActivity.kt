@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 
 private const val TAG = "MainActivity"
+
 class MainActivity : AppCompatActivity() {
 
     private val mainActivityViewModel by viewModels<MainActivityViewModel> {
@@ -35,8 +36,9 @@ class MainActivity : AppCompatActivity() {
                 mainActivityViewModel.appDataStateFlow
                     .filterIsInstance<LCE.Content>()
                     .collect {
-                    Log.d(TAG, it.appDataList.toString())
-                }
+                        Log.d(TAG, it.appDataList.toString())
+
+                    }
             }
         }
     }
