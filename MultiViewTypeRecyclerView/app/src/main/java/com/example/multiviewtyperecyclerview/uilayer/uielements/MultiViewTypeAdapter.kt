@@ -6,13 +6,15 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.camera.view.PreviewView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.multiviewtyperecyclerview.R
 import com.example.multiviewtyperecyclerview.uilayer.dataclass.AppData
 
 
 class MultiViewTypeAdapter(
-    private val appDataList: List<AppData>
+    private val appDataList: List<AppData>,
+    private val onImageClicked: (previewView: PreviewView) -> Unit = {}
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {

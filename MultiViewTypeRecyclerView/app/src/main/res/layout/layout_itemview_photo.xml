@@ -21,6 +21,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title" />
 
+<!--    <androidx.camera.view.PreviewView-->
+<!--        android:id="@+id/previewView"-->
+<!--        android:layout_width="250dp"-->
+<!--        android:layout_height="250dp"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/title" />-->
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
