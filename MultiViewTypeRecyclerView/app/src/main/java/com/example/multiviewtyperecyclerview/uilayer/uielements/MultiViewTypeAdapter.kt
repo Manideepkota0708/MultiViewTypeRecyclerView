@@ -4,10 +4,12 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.multiviewtyperecyclerview.R
@@ -16,7 +18,10 @@ import com.example.multiviewtyperecyclerview.uilayer.dataclass.AppData
 
 class MultiViewTypeAdapter(
     private val appDataList: List<AppData>,
-    private val imageMap: Map<String, Uri>,
+    private val imageMap: Map<String, Uri?>,
+    private val radioButtonMap: Map<String, Int>,
+    private val switchMap: Map<String, Boolean>,
+    private val commentMap: Map<String, String>,
     private val onImageClicked: (imageView: ImageView, id: String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -74,7 +79,11 @@ class MultiViewTypeAdapter(
             }
             else -> {
                 val commentView = holder as CommentViewHolder
-
+                switchMap[appData.id]!!.also {
+                    commentView.switchCompat.isChecked = it
+                    commentView.editText.visibility = if(it) View.VISIBLE else View.GONE
+                    commentView.editText.setText(commentMap[appData.id])
+                }
             }
         }
     }
@@ -104,7 +113,8 @@ class MultiViewTypeAdapter(
     }
 
     inner class CommentViewHolder(commentView: View) : RecyclerView.ViewHolder(commentView) {
-
+        val switchCompat: SwitchCompat = commentView.findViewById(R.id.switchCompat)
+        val editText: EditText = commentView.findViewById(R.id.editText)
     }
 
 }

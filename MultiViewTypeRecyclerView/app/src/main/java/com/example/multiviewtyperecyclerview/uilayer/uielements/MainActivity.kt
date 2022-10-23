@@ -193,7 +193,11 @@ class MainActivity : AppCompatActivity() {
                             layoutManager = LinearLayoutManager(this@MainActivity)
                             adapter = MultiViewTypeAdapter(
                                 it.appDataList,
-                                mainActivityViewModel.imageMap
+                                mainActivityViewModel.imageMap,
+                                mainActivityViewModel.radioButtonMap,
+                                mainActivityViewModel.switchMap,
+                                mainActivityViewModel.commentMap
+
                             ) { imageView, id ->
                                 this@MainActivity.imageView = imageView
                                 this@MainActivity.id = id

@@ -62,7 +62,7 @@
 },
 {
 "type": "SINGLE_CHOICE",
-"id": "choice2",
+"id": "choice3",
 "title": "Photo 3 choice",
 "dataMap": {
 "options": [
@@ -85,6 +85,95 @@
 {
 "type": "PHOTO",
 "id": "pic4",
+"title": "Photo 4",
+"dataMap": {}
+},
+{
+"type": "PHOTO",
+"id": "pic5",
+"title": "Photo 1",
+"dataMap": {}
+},
+{
+"type": "SINGLE_CHOICE",
+"id": "choice5",
+"title": "Photo 5 choice",
+"dataMap": {
+"options": [
+"Good",
+"OK",
+"Bad"
+]
+}
+},
+{
+"type": "COMMENT",
+"id": "comment4",
+"title": "Photo 4 comments",
+"dataMap": {}
+},
+{
+"type": "PHOTO",
+"id": "pic6",
+"title": "Photo 2",
+"dataMap": {}
+},
+{
+"type": "SINGLE_CHOICE",
+"id": "choice6",
+"title": "Photo 6 choice",
+"dataMap": {
+"options": [
+"Good",
+"OK",
+"Bad"
+]
+}
+},
+{
+"type": "COMMENT",
+"id": "comment5",
+"title": "Photo 2 comments",
+
+"dataMap": {}
+},
+{
+"type": "COMMENT",
+"id": "comment6",
+"title": "Photo 3 comments",
+"dataMap": {}
+},
+{
+"type": "PHOTO",
+"id": "pic7",
+"title": "Photo 3",
+"dataMap": {}
+},
+{
+"type": "SINGLE_CHOICE",
+"id": "choice7",
+"title": "Photo 7 choice",
+"dataMap": {
+"options": [
+"Nice",
+"Not Nice"
+]
+}
+},
+{
+"type": "SINGLE_CHOICE",
+"id": "choice8",
+"title": "Photo 8 type",
+"dataMap": {
+"options": [
+"Document",
+"Face"
+]
+}
+},
+{
+"type": "PHOTO",
+"id": "pic8",
 "title": "Photo 4",
 "dataMap": {}
 }

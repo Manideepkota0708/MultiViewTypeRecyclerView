@@ -6,11 +6,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.multiviewtyperecyclerview.R
 import com.example.multiviewtyperecyclerview.uilayer.dataclass.AppData
+import com.example.multiviewtyperecyclerview.uilayer.dataclass.ContentType
 import com.example.multiviewtyperecyclerview.utils.LCE
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -25,15 +25,32 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     val appDataStateFlow: StateFlow<LCE> = appDataMutableStateFlow
 
-    val imageMap = hashMapOf<String, Uri>()
+    val imageMap = hashMapOf<String, Uri?>()
+    val switchMap = hashMapOf<String, Boolean>()
+    val commentMap = hashMapOf<String, String>()
+    val radioButtonMap = hashMapOf<String, Int>()
 
     fun loadAppData() {
         viewModelScope.launch {
             if (appDataStateFlow.value == LCE.YetToFetch || appDataStateFlow.value is LCE.Error) {
                 appDataMutableStateFlow.emit(LCE.Loading)
                 try {
-                    val appData = readDataFromRawFolder()
-                    appDataMutableStateFlow.emit(LCE.Content(appData))
+                    val appDataList = readDataFromRawFolder()
+                    appDataMutableStateFlow.emit(LCE.Content(appDataList))
+                    appDataList.forEach {
+                        when(it.type){
+                            ContentType.PHOTO -> {
+                                imageMap[it.id] = null
+                            }
+                            ContentType.SINGLE_CHOICE -> {
+                                radioButtonMap[it.id] = -1
+                            }
+                            ContentType.COMMENT -> {
+                                switchMap[it.id] = false
+                                commentMap[it.id] = ""
+                            }
+                        }
+                    }
 //                while(true){
 //                    delay(2000)
 //                    val newAppData = (appDataMutableStateFlow.value as LCE.Content).appDataList.toMutableList()
