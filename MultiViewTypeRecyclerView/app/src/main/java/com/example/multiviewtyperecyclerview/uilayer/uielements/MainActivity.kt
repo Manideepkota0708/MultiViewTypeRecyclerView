@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
     lateinit var cameraProvider: ProcessCameraProvider
     lateinit var imageView: ImageView
+    lateinit var id: String
 
     private val mainActivityViewModel by viewModels<MainActivityViewModel> {
         object : ViewModelProvider.Factory {
@@ -172,6 +173,7 @@ class MainActivity : AppCompatActivity() {
                     val msg = "Photo capture succeeded: ${output.savedUri}"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
+                    mainActivityViewModel.imageMap[id] = output.savedUri!!
                     imageView.setImageURI(output.savedUri)
                     cameraProvider.unbindAll()
                     findViewById<PreviewView>(R.id.previewView).visibility = View.GONE
@@ -189,8 +191,12 @@ class MainActivity : AppCompatActivity() {
                         Log.d(TAG, it.appDataList.toString())
                         findViewById<RecyclerView>(R.id.recyclerView).apply {
                             layoutManager = LinearLayoutManager(this@MainActivity)
-                            adapter = MultiViewTypeAdapter(it.appDataList) { imageView ->
+                            adapter = MultiViewTypeAdapter(
+                                it.appDataList,
+                                mainActivityViewModel.imageMap
+                            ) { imageView, id ->
                                 this@MainActivity.imageView = imageView
+                                this@MainActivity.id = id
                                 this@MainActivity.findViewById<PreviewView>(R.id.previewView).visibility =
                                     View.VISIBLE
                                 requestPermissionsAndStartCamera()

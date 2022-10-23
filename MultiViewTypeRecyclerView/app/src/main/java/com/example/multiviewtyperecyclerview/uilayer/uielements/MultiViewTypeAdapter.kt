@@ -1,5 +1,6 @@
 package com.example.multiviewtyperecyclerview.uilayer.uielements
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.multiviewtyperecyclerview.R
 import com.example.multiviewtyperecyclerview.uilayer.dataclass.AppData
@@ -14,7 +16,8 @@ import com.example.multiviewtyperecyclerview.uilayer.dataclass.AppData
 
 class MultiViewTypeAdapter(
     private val appDataList: List<AppData>,
-    private val onImageClicked: (imageView: ImageView) -> Unit
+    private val imageMap: Map<String, Uri>,
+    private val onImageClicked: (imageView: ImageView, id: String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
@@ -48,8 +51,18 @@ class MultiViewTypeAdapter(
             0 -> {
                 val photoViewHolder = holder as PhotoViewHolder
                 photoViewHolder.titleView.text = appData.title
+                photoViewHolder.imageView.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        photoViewHolder.imageView.resources,
+                        R.drawable.outline_add_photo_alternate_24,
+                        null
+                    )
+                )
+                imageMap[appData.id]?.let {
+                    photoViewHolder.imageView.setImageURI(it)
+                }
                 photoViewHolder.imageView.setOnClickListener {
-                    onImageClicked(it as ImageView)
+                    onImageClicked(it as ImageView, appData.id)
                 }
             }
             1 -> {
