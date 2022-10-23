@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.camera.core.CameraSelector
@@ -38,6 +40,8 @@ private val CAMERA_PERMISSIONS =
 
 class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
+    lateinit var cameraProvider: ProcessCameraProvider
+    lateinit var imageView: ImageView
 
     private val mainActivityViewModel by viewModels<MainActivityViewModel> {
         object : ViewModelProvider.Factory {
@@ -90,8 +94,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    lateinit var cameraProvider: ProcessCameraProvider
 
     private fun startCamera() {
         Log.d(TAG, "cameraStarted")
@@ -170,7 +172,9 @@ class MainActivity : AppCompatActivity() {
                     val msg = "Photo capture succeeded: ${output.savedUri}"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
+                    imageView.setImageURI(output.savedUri)
                     cameraProvider.unbindAll()
+                    findViewById<PreviewView>(R.id.previewView).visibility = View.GONE
                 }
             }
         )
@@ -185,8 +189,12 @@ class MainActivity : AppCompatActivity() {
                         Log.d(TAG, it.appDataList.toString())
                         findViewById<RecyclerView>(R.id.recyclerView).apply {
                             layoutManager = LinearLayoutManager(this@MainActivity)
-                            adapter = MultiViewTypeAdapter(it.appDataList)
-                            requestPermissionsAndStartCamera()
+                            adapter = MultiViewTypeAdapter(it.appDataList) { imageView ->
+                                this@MainActivity.imageView = imageView
+                                this@MainActivity.findViewById<PreviewView>(R.id.previewView).visibility =
+                                    View.VISIBLE
+                                requestPermissionsAndStartCamera()
+                            }
                         }
                     }
             }

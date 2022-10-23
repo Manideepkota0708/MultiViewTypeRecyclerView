@@ -3,10 +3,10 @@ package com.example.multiviewtyperecyclerview.uilayer.uielements
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
-import androidx.camera.view.PreviewView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.multiviewtyperecyclerview.R
 import com.example.multiviewtyperecyclerview.uilayer.dataclass.AppData
@@ -14,7 +14,7 @@ import com.example.multiviewtyperecyclerview.uilayer.dataclass.AppData
 
 class MultiViewTypeAdapter(
     private val appDataList: List<AppData>,
-    private val onImageClicked: (previewView: PreviewView) -> Unit = {}
+    private val onImageClicked: (imageView: ImageView) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
@@ -48,6 +48,9 @@ class MultiViewTypeAdapter(
             0 -> {
                 val photoViewHolder = holder as PhotoViewHolder
                 photoViewHolder.titleView.text = appData.title
+                photoViewHolder.imageView.setOnClickListener {
+                    onImageClicked(it as ImageView)
+                }
             }
             1 -> {
                 val singleChoiceViewHolder = holder as SingleChoiceViewHolder
@@ -67,6 +70,7 @@ class MultiViewTypeAdapter(
 
     inner class PhotoViewHolder(photoView: View) : RecyclerView.ViewHolder(photoView) {
         val titleView: TextView = photoView.findViewById(R.id.title)
+        val imageView: ImageView = photoView.findViewById(R.id.imageView)
     }
 
     inner class SingleChoiceViewHolder(singleChoiceView: View) :
