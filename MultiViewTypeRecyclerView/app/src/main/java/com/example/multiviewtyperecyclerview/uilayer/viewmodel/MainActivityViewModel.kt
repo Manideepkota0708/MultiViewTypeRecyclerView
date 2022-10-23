@@ -43,7 +43,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                                 imageMap[it.id] = null
                             }
                             ContentType.SINGLE_CHOICE -> {
-                                radioButtonMap[it.id] = -1
+                                radioButtonMap[it.id] = 1
                             }
                             ContentType.COMMENT -> {
                                 switchMap[it.id] = false

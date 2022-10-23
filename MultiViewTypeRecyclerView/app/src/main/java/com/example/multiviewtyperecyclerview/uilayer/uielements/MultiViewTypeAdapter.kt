@@ -1,6 +1,7 @@
 package com.example.multiviewtyperecyclerview.uilayer.uielements
 
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +17,17 @@ import com.example.multiviewtyperecyclerview.R
 import com.example.multiviewtyperecyclerview.uilayer.dataclass.AppData
 
 
+private const val TAG = "MultiViewTypeAdapter"
+
 class MultiViewTypeAdapter(
     private val appDataList: List<AppData>,
     private val imageMap: Map<String, Uri?>,
     private val radioButtonMap: Map<String, Int>,
     private val switchMap: Map<String, Boolean>,
     private val commentMap: Map<String, String>,
-    private val onImageClicked: (imageView: ImageView, id: String) -> Unit
+    private val onImageClicked: (imageView: ImageView, id: String) -> Unit,
+    private val onRadioButtonClicked: (id: String, index: Int) -> Unit,
+    private val onSwitchCompatClicked: (id: String, isEnabled: Boolean) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
@@ -74,14 +79,25 @@ class MultiViewTypeAdapter(
                 val singleChoiceViewHolder = holder as SingleChoiceViewHolder
                 singleChoiceViewHolder.titleView.text = appData.title
                 appData.dataMap?.options?.let {
-                    singleChoiceViewHolder.addItemsToRadioGroup(it)
+                    Log.d(TAG, "position: $position, id: ${appData.id}, index: ${radioButtonMap[appData.id]!!}")
+                    singleChoiceViewHolder.addItemsToRadioGroup(
+                        it,
+                        appData.id,
+                        radioButtonMap[appData.id]!!,
+                        position
+                    )
                 }
             }
             else -> {
                 val commentView = holder as CommentViewHolder
                 switchMap[appData.id]!!.also {
+                    commentView.switchCompat.setOnCheckedChangeListener(null)
                     commentView.switchCompat.isChecked = it
-                    commentView.editText.visibility = if(it) View.VISIBLE else View.GONE
+                    commentView.switchCompat.setOnCheckedChangeListener { _, isChecked ->
+                        onSwitchCompatClicked(appData.id, isChecked)
+                        notifyItemChanged(position)
+                    }
+                    commentView.editText.visibility = if (it) View.VISIBLE else View.GONE
                     commentView.editText.setText(commentMap[appData.id])
                 }
             }
@@ -100,16 +116,18 @@ class MultiViewTypeAdapter(
         val titleView: TextView = singleChoiceView.findViewById(R.id.title)
         private val radioGroup: RadioGroup = singleChoiceView.findViewById(R.id.radioGroup)
 
-        fun addItemsToRadioGroup(stringList: List<String>) {
+        fun addItemsToRadioGroup(stringList: List<String>, id: String, selectedIndex: Int, appDataIndex: Int) {
             radioGroup.apply {
                 removeAllViews()
-                stringList.forEach {
+                stringList.forEachIndexed { index, string ->
                     addView(RadioButton(this.context).apply {
-                        text = it
+                        text = string
                     })
                 }
+                if (selectedIndex != -1) radioGroup.check(radioGroup.getChildAt(selectedIndex).id)
             }
         }
+
     }
 
     inner class CommentViewHolder(commentView: View) : RecyclerView.ViewHolder(commentView) {

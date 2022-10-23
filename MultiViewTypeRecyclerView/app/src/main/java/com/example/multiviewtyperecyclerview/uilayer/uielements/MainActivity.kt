@@ -196,15 +196,22 @@ class MainActivity : AppCompatActivity() {
                                 mainActivityViewModel.imageMap,
                                 mainActivityViewModel.radioButtonMap,
                                 mainActivityViewModel.switchMap,
-                                mainActivityViewModel.commentMap
+                                mainActivityViewModel.commentMap,
+                                { imageView, id ->
+                                    this@MainActivity.imageView = imageView
+                                    this@MainActivity.id = id
+                                    this@MainActivity.findViewById<PreviewView>(R.id.previewView).visibility =
+                                        View.VISIBLE
+                                    requestPermissionsAndStartCamera()
+                                },
+                                { id, index ->
+                                    mainActivityViewModel.radioButtonMap[id] = index
+                                },
+                                {id, isChecked ->
+                                    mainActivityViewModel.switchMap[id] = isChecked
+                                }
 
-                            ) { imageView, id ->
-                                this@MainActivity.imageView = imageView
-                                this@MainActivity.id = id
-                                this@MainActivity.findViewById<PreviewView>(R.id.previewView).visibility =
-                                    View.VISIBLE
-                                requestPermissionsAndStartCamera()
-                            }
+                            )
                         }
                     }
             }
