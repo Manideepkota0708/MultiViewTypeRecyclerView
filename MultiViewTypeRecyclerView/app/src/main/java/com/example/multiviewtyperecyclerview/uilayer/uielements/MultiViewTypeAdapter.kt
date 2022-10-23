@@ -26,6 +26,7 @@ class MultiViewTypeAdapter(
     private val switchMap: Map<String, Boolean>,
     private val commentMap: Map<String, String>,
     private val onImageClicked: (imageView: ImageView, id: String) -> Unit,
+    private val onCancelImageClicked: (id: String) -> Unit,
     private val onRadioButtonClicked: (id: String, index: Int) -> Unit,
     private val onSwitchCompatClicked: (id: String, isEnabled: Boolean) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -71,8 +72,20 @@ class MultiViewTypeAdapter(
                 imageMap[appData.id]?.let {
                     photoViewHolder.imageView.setImageURI(it)
                 }
+                photoViewHolder.imageView.setOnClickListener(null)
                 photoViewHolder.imageView.setOnClickListener {
                     onImageClicked(it as ImageView, appData.id)
+                }
+                photoViewHolder.cancelImageView.setOnClickListener(null)
+                photoViewHolder.cancelImageView.setOnClickListener {
+                    onCancelImageClicked(appData.id)
+                    photoViewHolder.imageView.setImageDrawable(
+                        ResourcesCompat.getDrawable(
+                            photoViewHolder.imageView.resources,
+                            R.drawable.outline_add_photo_alternate_24,
+                            null
+                        )
+                    )
                 }
             }
             1 -> {
@@ -83,8 +96,7 @@ class MultiViewTypeAdapter(
                     singleChoiceViewHolder.addItemsToRadioGroup(
                         it,
                         appData.id,
-                        radioButtonMap[appData.id]!!,
-                        position
+                        radioButtonMap[appData.id]!!
                     )
                 }
             }
@@ -109,6 +121,7 @@ class MultiViewTypeAdapter(
     inner class PhotoViewHolder(photoView: View) : RecyclerView.ViewHolder(photoView) {
         val titleView: TextView = photoView.findViewById(R.id.title)
         val imageView: ImageView = photoView.findViewById(R.id.imageView)
+        val cancelImageView: ImageView = photoView.findViewById(R.id.cancelButton)
     }
 
     inner class SingleChoiceViewHolder(singleChoiceView: View) :
@@ -116,8 +129,9 @@ class MultiViewTypeAdapter(
         val titleView: TextView = singleChoiceView.findViewById(R.id.title)
         private val radioGroup: RadioGroup = singleChoiceView.findViewById(R.id.radioGroup)
 
-        fun addItemsToRadioGroup(stringList: List<String>, id: String, selectedIndex: Int, appDataIndex: Int) {
+        fun addItemsToRadioGroup(stringList: List<String>, id: String, selectedIndex: Int) {
             radioGroup.apply {
+                setOnCheckedChangeListener(null)
                 removeAllViews()
                 stringList.forEachIndexed { index, string ->
                     addView(RadioButton(this.context).apply {
@@ -125,6 +139,9 @@ class MultiViewTypeAdapter(
                     })
                 }
                 if (selectedIndex != -1) radioGroup.check(radioGroup.getChildAt(selectedIndex).id)
+                setOnCheckedChangeListener { _, checkedId ->
+                    onRadioButtonClicked(id, (0 until radioGroup.childCount).find { radioGroup.getChildAt(it).id == checkedId }!!)
+                }
             }
         }
 

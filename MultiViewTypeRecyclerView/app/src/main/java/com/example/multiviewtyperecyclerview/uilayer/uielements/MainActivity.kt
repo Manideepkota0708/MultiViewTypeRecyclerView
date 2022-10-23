@@ -204,10 +204,13 @@ class MainActivity : AppCompatActivity() {
                                         View.VISIBLE
                                     requestPermissionsAndStartCamera()
                                 },
+                                { id ->
+                                    mainActivityViewModel.imageMap[id] = null
+                                },
                                 { id, index ->
                                     mainActivityViewModel.radioButtonMap[id] = index
                                 },
-                                {id, isChecked ->
+                                { id, isChecked ->
                                     mainActivityViewModel.switchMap[id] = isChecked
                                 }
 
